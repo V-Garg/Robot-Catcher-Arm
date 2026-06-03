@@ -4,12 +4,6 @@ A full-stack robotics project demonstrating real-time dynamic ball interception 
 
 ---
 
-## Demo
-
-The arm detects a thrown ball using a simulated depth camera, predicts its trajectory using a Kalman filter, solves inverse kinematics to position the hoop end effector at the intercept point, and catches the ball in the net before it hits the ground.
-
----
-
 ## Project Overview
 
 | Layer | Technology |
