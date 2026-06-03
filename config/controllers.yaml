@@ -1,0 +1,53 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 1000
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+arm_controller:
+  ros__parameters:
+    joints:
+      - BaseYaw
+      - ShoulderPitch
+      - ElbowPitch
+      - WristPitch
+      - HoopRotate
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    state_publish_rate: 50.0
+    action_monitor_rate: 20.0
+    allow_partial_joints_goal: true
+    interpolate_from_desired_state: true
+    gains:
+      BaseYaw:
+        p: 50.0
+        i: 0.0
+        d: 0.5
+        i_clamp: 1.0
+      ShoulderPitch:
+        p: 5.0
+        i: 0.0
+        d: 0.5
+        i_clamp: 1.0
+      ElbowPitch:
+        p: 5.0
+        i: 0.0
+        d: 0.5
+        i_clamp: 1.0
+      WristPitch:
+        p: 5.0
+        i: 0.0
+        d: 0.5
+        i_clamp: 1.0
+      HoopRotate:
+        p: 5.0
+        i: 0.0
+        d: 0.5
+        i_clamp: 1.0

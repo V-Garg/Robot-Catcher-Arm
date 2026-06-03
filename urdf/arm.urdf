@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="arm">
+
+  <link name="world"/>
+
+  <joint name="world_fixed" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <ros2_control name="arm_hardware" type="system">
+    <hardware>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+    </hardware>
+    <joint name="BaseYaw">
+      <command_interface name="position">
+        <param name="position_proportional_gain">5.0</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="ShoulderPitch">
+      <command_interface name="position">
+        <param name="position_proportional_gain">2.0</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="ElbowPitch">
+      <command_interface name="position">
+        <param name="position_proportional_gain">2.0</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="WristPitch">
+      <command_interface name="position">
+        <param name="position_proportional_gain">2.0</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="HoopRotate">
+      <command_interface name="position">
+        <param name="position_proportional_gain">2.0</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+
+  <link name="base_link"/>
+
+  <joint name="base_link_to_base_body" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_body"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="base_body">
+    <inertial>
+      <origin xyz="0.000363 -0.016407 -0.013656" rpy="0 0 0"/>
+      <mass value="4.0693408144362"/>
+      <inertia ixx="0.0231" ixy="-0.000317" ixz="7.19E-06"
+               iyy="0.0371" iyz="-0.000489" izz="0.0148"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm/meshes/base_link.STL"/>
+      </geometry>
+      <material name="grey"><color rgba="0.75 0.75 0.75 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm/meshes/base_link.STL"/>
+      </geometry>
+      <surface>
+        <contact><collide_bitmask>0x01</collide_bitmask></contact>
+      </surface>
+    </collision>
+  </link>
+
+  <joint name="BaseYaw" type="continuous">
+    <origin xyz="0 0 0" rpy="-1.5569 -0.028316 -1.2307"/>
+    <parent link="base_link"/>
+    <child link="Shoulder"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="32.0" velocity="10.0"/>
+    <dynamics damping="2.0" friction="0.0"/>
+  </joint>
+
+  <link name="Shoulder">
+    <inertial>
+      <origin xyz="0.000158 -0.095156 0.000474" rpy="0 0 0"/>
+      <mass value="3.12266982777306"/>
+      <inertia ixx="0.00674" ixy="0.000164" ixz="7.55E-05"
+               iyy="0.00592" iyz="0.000504" izz="0.00694"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm/meshes/Shoulder.STL"/>
+      </geometry>
+      <material name="grey"><color rgba="0.75 0.75 0.75 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm/meshes/Shoulder.STL"/>
+      </geometry>
+      <surface>
+        <contact><collide_bitmask>0x01</collide_bitmask></contact>
+      </surface>
+    </collision>
+  </link>
+
+  <joint name="ShoulderPitch" type="revolute">
+    <origin xyz="0 -0.207 0" rpy="-1.84 -0.16389 -2.1048"/>
+    <parent link="Shoulder"/>
+    <child link="UpperArm"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.57" upper="1.57" effort="24.8" velocity="6.0"/>
+    <dynamics damping="1.5" friction="0.0"/>
+  </joint>
+
+  <link name="UpperArm">
+    <inertial>
+      <origin xyz="0.109556 0.014861 0.063252" rpy="0 0 0"/>
+      <mass value="2.95618459814663"/>
+      <inertia ixx="0.00977" ixy="0.000779" ixz="-0.00864"
+               iyy="0.02853" iyz="0.000450" izz="0.01974"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm/meshes/UpperArm.STL"/>
+      </geometry>
+      <material name="grey"><color rgba="0.75 0.75 0.75 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm/meshes/UpperArm.STL"/>
+      </geometry>
+      <surface>
+        <contact><collide_bitmask>0x01</collide_bitmask></contact>
+      </surface>
+    </collision>
+  </link>
+
+  <joint name="ElbowPitch" type="revolute">
+    <origin xyz="0.21651 0 0.125" rpy="-1.5708 -1.0086 -3.1416"/>
+    <parent link="UpperArm"/>
+    <child link="LowerArm"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.57" upper="1.57" effort="9.0" velocity="8.0"/>
+    <dynamics damping="0.1" friction="0.0"/>
+  </joint>
+
+  <link name="LowerArm">
+    <inertial>
+      <origin xyz="1.73E-07 -0.114308 0.022476" rpy="0 0 0"/>
+      <mass value="1.89340928996277"/>
+      <inertia ixx="0.01462" ixy="3.99E-10" ixz="-7.82E-09"
+               iyy="0.00250" iyz="-0.000482" izz="0.01664"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm/meshes/LowerArm.STL"/>
+      </geometry>
+      <material name="grey"><color rgba="0.75 0.75 0.75 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm/meshes/LowerArm.STL"/>
+      </geometry>
+      <surface>
+        <contact><collide_bitmask>0x01</collide_bitmask></contact>
+      </surface>
+    </collision>
+  </link>
+
+  <joint name="WristPitch" type="revolute">
+    <origin xyz="0 -0.25 0" rpy="1.5708 0 2.1458"/>
+    <parent link="LowerArm"/>
+    <child link="Wrist"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.57" upper="1.57" effort="4.1" velocity="10.0"/>
+    <dynamics damping="0.1" friction="0.0"/>
+  </joint>
+
+  <link name="Wrist">
+    <inertial>
+      <origin xyz="-0.058969 -0.016427 -0.034046" rpy="0 0 0"/>
+      <mass value="0.913494263645654"/>
+      <inertia ixx="0.00109" ixy="0.000113" ixz="-0.000645"
+               iyy="0.00273" iyz="6.51E-05" izz="0.00184"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm/meshes/Wrist.STL"/>
+      </geometry>
+      <material name="grey"><color rgba="0.75 0.75 0.75 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm/meshes/Wrist.STL"/>
+      </geometry>
+      <surface>
+        <contact><collide_bitmask>0x01</collide_bitmask></contact>
+      </surface>
+    </collision>
+  </link>
+
+  <joint name="HoopRotate" type="continuous">
+    <origin xyz="-0.15912 -0.00405 -0.091868" rpy="0.52375 0.023075 -1.5575"/>
+    <parent link="Wrist"/>
+    <child link="Hoop"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="5.0" velocity="15.0"/>
+    <dynamics damping="0.1" friction="0.0"/>
+  </joint>
+
+  <!-- HOOP — visual only, no physical collision so ball passes through rim -->
+  <link name="Hoop">
+    <inertial>
+      <origin xyz="-1.44E-07 -0.062493 0.008432" rpy="0 0 0"/>
+      <mass value="0.0430752676223343"/>
+      <inertia ixx="0.000274" ixy="2.45E-10" ixz="9.22E-12"
+               iyy="0.000142" iyz="1.64E-05" izz="0.000407"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm/meshes/Hoop.STL"/>
+      </geometry>
+      <material name="dark_grey"><color rgba="0.3 0.3 0.3 1"/></material>
+    </visual>
+    <!-- No real collision — ball passes through rim freely -->
+    <collision>
+      <geometry><box size="0.001 0.001 0.001"/></geometry>
+    </collision>
+  </link>
+
+  <!-- CAMERA LINK -->
+  <link name="Camera">
+    <inertial>
+      <origin xyz="0.000246 -6.06E-05 -0.013048" rpy="0 0 0"/>
+      <mass value="0.120833728236314"/>
+      <inertia ixx="1.07E-05" ixy="-7.59E-09" ixz="6.60E-07"
+               iyy="7.39E-05" iyz="-3.16E-09" izz="7.36E-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm/meshes/Camera.STL"/>
+      </geometry>
+      <material name="black"><color rgba="0.1 0.1 0.1 1"/></material>
+    </visual>
+    <collision>
+      <geometry><box size="0.001 0.001 0.001"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="FixedCamera" type="fixed">
+    <origin xyz="-0.0020245 -0.1136 0.092255" rpy="0.76332 -0.022515 0.00046617"/>
+    <parent link="base_link"/>
+    <child link="Camera"/>
+  </joint>
+
+  <link name="camera_optical"/>
+
+  <joint name="camera_to_optical" type="fixed">
+    <parent link="Camera"/>
+    <child link="camera_optical"/>
+    <origin xyz="0 0 0" rpy="0 -1.5707 -1.5707"/>
+  </joint>
+
+  <!-- TRANSMISSIONS -->
+  <transmission name="BaseYaw_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="BaseYaw">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="BaseYaw_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="ShoulderPitch_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="ShoulderPitch">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="ShoulderPitch_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="ElbowPitch_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="ElbowPitch">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="ElbowPitch_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="WristPitch_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="WristPitch">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="WristPitch_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="HoopRotate_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="HoopRotate">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="HoopRotate_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <!-- ALL GAZEBO BLOCKS AT END -->
+  <gazebo>
+    <plugin filename="libgz_ros2_control-system.so"
+            name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+      <parameters>/home/vaibhav/ros2_ws/src/arm/config/controllers.yaml</parameters>
+    </plugin>
+  </gazebo>
+
+  <gazebo reference="base_link">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <gazebo reference="base_body">
+    <material>Gazebo/Grey</material>
+    <selfCollide>false</selfCollide>
+  </gazebo>
+
+  <gazebo reference="Shoulder">
+    <material>Gazebo/Grey</material>
+    <selfCollide>false</selfCollide>
+  </gazebo>
+
+  <gazebo reference="UpperArm">
+    <material>Gazebo/Grey</material>
+    <selfCollide>false</selfCollide>
+  </gazebo>
+
+  <gazebo reference="LowerArm">
+    <material>Gazebo/Grey</material>
+    <selfCollide>false</selfCollide>
+  </gazebo>
+
+  <gazebo reference="Wrist">
+    <material>Gazebo/Grey</material>
+    <selfCollide>false</selfCollide>
+  </gazebo>
+
+  <gazebo reference="Hoop">
+    <material>Gazebo/DarkGrey</material>
+    <selfCollide>false</selfCollide>
+  </gazebo>
+
+  <gazebo reference="Camera">
+    <material>Gazebo/Black</material>
+    <sensor name="depth_camera" type="depth_camera">
+      <always_on>1</always_on>
+      <update_rate>30</update_rate>
+      <topic>/camera/depth/image_raw</topic>
+      <gz_frame_id>camera_optical</gz_frame_id>
+      <pose>0 0 0 0 -1.5707 -1.5707</pose>
+      <camera>
+        <horizontal_fov>1.5184</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R_FLOAT32</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>5.0</far>
+        </clip>
+      </camera>
+    </sensor>
+    <sensor name="color_camera" type="camera">
+      <always_on>1</always_on>
+      <update_rate>30</update_rate>
+      <topic>/camera/color/image_raw</topic>
+      <gz_frame_id>camera_optical</gz_frame_id>
+      <pose>0 0 0 0 -1.5707 -1.5707</pose>
+      <camera>
+        <horizontal_fov>1.5184</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>5.0</far>
+        </clip>
+      </camera>
+    </sensor>
+  </gazebo>
+
+</robot>
