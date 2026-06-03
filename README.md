@@ -2,6 +2,8 @@
 
 A full-stack robotics project demonstrating real-time dynamic ball interception using a custom-designed 5-DOF robotic arm. The system integrates mechanical design, simulation, computer vision, trajectory prediction, and inverse kinematics into a complete autonomous interception pipeline.
 
+![Ball interception demo](demo.gif)
+
 ---
 
 ## Project Overview
