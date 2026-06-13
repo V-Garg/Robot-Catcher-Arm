@@ -201,8 +201,12 @@ sudo apt install \
 ## Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/YOUR_USERNAME/arm-interception.git ~/ros2_ws/src/arm
+# Create a workspace (if you don't already have one)
+mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws/src
+
+# Clone the repository git
+clone https://github.com/V-Garg/Robot-Catcher-Arm.git
 
 # Build
 cd ~/ros2_ws
